@@ -21,6 +21,22 @@ body {
     width: 100%;
 }
 
+.entry-item {
+    width: 50%;
+    display: grid;
+    grid-template-columns: auto auto 5% 10% 10%;
+    grid-template-areas: "entry-title entry-due-date entry-complete entry-details entry-delete";
+    list-style: none;
+    text-align: center;
+}
+
+.entry-container {
+    vertical-align: top;
+}
+
+.entry-title {
+    border-left: 1px solid #919393;
+}
 /* QR code generator */
 #qrCode {
     margin: 15px;

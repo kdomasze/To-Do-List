@@ -10,7 +10,9 @@ namespace ToDoList.Models
     {
         public int ID { get; set; }
         public string Title { get; set; }
+        [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DueDate { get; set; }
         [Display(Name = "Completed")]
         public bool Completed { get; set; }
