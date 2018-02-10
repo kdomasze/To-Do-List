@@ -1,0 +1,58 @@
+﻿@page
+@model ToDoList.Pages.Entries.ViewTestModel
+@{
+    ViewData["Title"] = "ViewTest";
+}
+
+<h2>ViewTest</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].Entry.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].Entry.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].Entry.DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entries[0].Entry.Completed)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Entries)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Entry.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Entry.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Entry.DueDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Entry.Completed)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Entry.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Entry.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Entry.ID">Delete</a>
+                </td>
+            </tr>
+
+            @using ToDoList.Utilities
+            @Html.PrintEntry(item)
+        }
+    </tbody>
+</table>
