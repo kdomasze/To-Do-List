@@ -1,0 +1,49 @@
+@page
+@model ToDoList.Pages.Entries.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Entry</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.CreationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.CreationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.DueDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.DueDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.Completed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.Completed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.Parent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.Parent)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Entry.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
