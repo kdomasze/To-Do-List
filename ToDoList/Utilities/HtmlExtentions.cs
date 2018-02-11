@@ -100,7 +100,7 @@ namespace ToDoList.Utilities
 
             // generate link for details
             TagBuilder a = new TagBuilder("a");
-            a.MergeAttribute("href", $"./{action}?id={id}");
+            a.MergeAttribute("href", $"./Entries/{action}?id={id}");
 
             // generate font-awesome for details
             TagBuilder i = new TagBuilder("i");

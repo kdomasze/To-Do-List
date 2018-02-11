@@ -26,12 +26,19 @@ namespace ToDoList.Pages.Entries
         [BindProperty]
         public Entry Entry { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
-            }
+            }            
+
+            if (String.IsNullOrEmpty(id) || !int.TryParse(id, out int parent)) parent = 0;
+
+            var currentDateTime = System.DateTime.Now;
+            
+            Entry.Parent = parent;
+            Entry.CreationDate = currentDateTime;
 
             _context.Entry.Add(Entry);
             await _context.SaveChangesAsync();
