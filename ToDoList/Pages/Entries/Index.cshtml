@@ -5,56 +5,27 @@
     ViewData["Title"] = "Index";
 }
 
+@using ToDoList.Utilities
 <h2>Index</h2>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Entry[0].Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Entry[0].CreationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Entry[0].DueDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Entry[0].Completed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Entry[0].Parent)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Entry) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Completed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Parent)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+@foreach (var item in Model.Entries)
+{
+    @if(item.Entry.ID != Model.Entries.First().Entry.ID)
+    {
+        <hr />
+    }
+    <div class="entry-container">
+        <ul class="entry-item">
+            <li class="entry-title">@Html.DisplayFor(modelItem => item.Entry.Title)</li>
+            <li class="entry-due-date">Due: @Html.DisplayFor(modelItem => item.Entry.DueDate)</li>
+            <li class="entry-complete">@Html.DisplayFor(modelItem => item.Entry.Completed)</li>
+            <li class="entry-details"><a asp-page="./Details" asp-route-id="@item.Entry.ID"><i class="fas fa-info-circle"></i></a></li>
+            <li class="entry-delete"><a asp-page="./Delete" asp-route-id="@item.Entry.ID"><i class="fas fa-trash"></i></a></li>
+            <li class="entry-add"><a asp-page="./Create" asp-route-id="@item.Entry.ID"><i class="fas fa-plus"></i></a></li>
+        </ul>
+    </div>
+    @Html.PrintEntry(item)
 }
-    </tbody>
-</table>

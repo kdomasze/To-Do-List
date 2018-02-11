@@ -24,10 +24,10 @@ body {
 .entry-item {
     width: 50%;
     display: grid;
-    grid-template-columns: auto auto 5% 10% 10%;
-    grid-template-areas: "entry-title entry-due-date entry-complete entry-details entry-delete";
+    grid-template-columns: auto auto 5% 5% 5% 5%;
+    grid-template-areas: "entry-title entry-due-date entry-complete entry-details entry-delete entry-add";
     list-style: none;
-    text-align: center;
+    text-align: right;
 }
 
 .entry-container {
@@ -35,7 +35,8 @@ body {
 }
 
 .entry-title {
-    border-left: 1px solid #919393;
+    border-left: 1px solid #eee;
+    text-align: center;
 }
 /* QR code generator */
 #qrCode {

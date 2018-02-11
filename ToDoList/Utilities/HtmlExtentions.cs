@@ -1,111 +1,82 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using ToDoList.Pages.Entries;
+using static ToDoList.Pages.Entries.IndexModel;
 
 namespace ToDoList.Utilities
 {
     public static class HtmlExtentions
     {
-        public static IHtmlContent PrintEntry(this IHtmlHelper<ViewTestModel> helper, EntryItem entry, int startMargin = 20)
+        /// <summary>
+        /// Special helper function that prints the todo list entries recursively if there are any children entries to be printed
+        /// </summary>
+        /// <param name="helper">Reference to the IHtmlHelper.</param>
+        /// <param name="entry">The entry item to check for children entries.</param>
+        /// <param name="startMargin">the margin that the children elements will start their indent from.</param>
+        /// <returns>The complete HTML content to be rendered</returns>
+        public static IHtmlContent PrintEntry(this IHtmlHelper<IndexModel> helper, EntryItem entry, int startMargin = 20)
         {
-            /*
-            <div style="margin-left: 20px;">
-                <ul class="entry-item">
-                    <li class="entry-title">@Html.DisplayFor(modelItem => item.Entry.Title)</li>
-                    <li class="entry-creation-date">@Html.DisplayFor(modelItem => item.Entry.CreationDate)</li>
-                    <li class="entry-due-date">@Html.DisplayFor(modelItem => item.Entry.DueDate)</li>
-                    <li class="entry-complete">@Html.DisplayFor(modelItem => item.Entry.Completed)</li>
-                    <li class="entry-details"><a asp-page="./Details" asp-route-id="@item.Entry.ID">Details</a></li>
-                    <li class="entry-delete"><a asp-page="./Delete" asp-route-id="@item.Entry.ID">Delete</a></li>
-                </ul>
-            </div> 
-            */
-
             StringBuilder output = new StringBuilder();
             if (entry.Children.Count > 0)
             {
                 foreach (EntryItem item in entry.Children)
                 {
+                    // generate div
                     TagBuilder divStyled = new TagBuilder("div");
                     divStyled.AddCssClass("entry-container");
                     divStyled.MergeAttribute("style", $"padding-left: {startMargin}px;");
 
+                    // generate ul
                     TagBuilder ul = new TagBuilder("ul");
                     ul.AddCssClass("entry-item");
 
+                    // generate li for title
                     TagBuilder liTitle = new TagBuilder("li");
                     liTitle.AddCssClass("entry-title");
                     liTitle.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.Title));
 
+                    // generate li for due date
                     TagBuilder liDueDate = new TagBuilder("li");
                     liDueDate.AddCssClass("entry-due-date");
                     liDueDate.InnerHtml.Append("Due: ");
                     liDueDate.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.DueDate));
 
+                    // generate li for completed
                     TagBuilder liCompleted = new TagBuilder("li");
                     liCompleted.AddCssClass("entry-completed");
                     liCompleted.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.Completed));
 
-                    TagBuilder liDetails = new TagBuilder("li");
-                    liDetails.AddCssClass("entry-details");
+                    // details link
+                    TagBuilder liDetails = BuildLiLink(helper, "entry-details", "Details", item.Entry.ID, "fa-info-circle");
 
-                    TagBuilder aDetails = new TagBuilder("a");
-                    aDetails.MergeAttribute("asp-page", "./Details");
-                    aDetails.MergeAttribute("asp-route-id", item.Entry.ID.ToString());
-                    aDetails.InnerHtml.Append("Details");
+                    // Delete link
+                    TagBuilder liDelete = BuildLiLink(helper, "entry-delete", "Delete", item.Entry.ID, "fa-trash");
 
-                    liDetails.InnerHtml.AppendHtml(aDetails);
+                    // Add link
+                    TagBuilder liAdd = BuildLiLink(helper, "entry-add", "Create", item.Entry.ID, "fa-plus");
 
-                    TagBuilder liDelete = new TagBuilder("li");
-                    liDelete.AddCssClass("entry-delete");
-
-                    TagBuilder aDelete = new TagBuilder("a");
-                    aDelete.MergeAttribute("asp-page", "./Delete");
-                    aDelete.MergeAttribute("asp-route-id", item.Entry.ID.ToString());
-                    aDelete.InnerHtml.Append("Delete");
-
-                    liDelete.InnerHtml.AppendHtml(aDelete);
-
+                    // assemble html
                     ul.InnerHtml.AppendHtml(liTitle);
                     ul.InnerHtml.AppendHtml(liDueDate);
                     ul.InnerHtml.AppendHtml(liCompleted);
                     ul.InnerHtml.AppendHtml(liDetails);
                     ul.InnerHtml.AppendHtml(liDelete);
+                    ul.InnerHtml.AppendHtml(liAdd);
 
                     divStyled.InnerHtml.AppendHtml(ul);
 
-                    /*
-                    output.Append($"<div style=\"margin-left: {startMargin}px; \">");
-                    output.Append("<ul class=\"entry-item\">");
-                    output.Append("<li class=\"entry-title\">");
-                    output.Append(GetString(helper.DisplayFor(modelItem => item.Entry.Title)));
-                    output.Append("</li>");
-                    output.Append("<li class=\"entry-creation-date\">");
-                    output.Append(GetString(helper.DisplayFor(modelItem => item.Entry.CreationDate)));
-                    output.Append("</li>");
-                    output.Append("<li class=\"entry-title\">");
-                    output.Append(GetString(helper.DisplayFor(modelItem => item.Entry.DueDate)));
-                    output.Append("</li>");
-                    output.Append("<li class=\"entry-title\">");
-                    output.Append(GetString(helper.DisplayFor(modelItem => item.Entry.Completed)));
-                    output.Append("</li>");
-                    output.Append("<li class=\"entry-title\">");
-                    output.Append("<a asp-page=\"./Details\" asp-route-id=\"@item.Entry.ID\">Details</a>");
-                    output.Append("</li>");
-                    output.Append("<a asp-page=\"./Delete\" asp-route-id=\"@item.Entry.ID\">Delete</a>");
-                    output.Append(item.Entry.Title);
-                    output.Append("</li>");
-                    output.Append("</ul>");
-                    output.Append("</div>");
-                    */
+                    // output to string
+                    output.Append("<hr />");
                     output.Append(GetString(divStyled));
                     output.Append(PrintEntry(helper, item, startMargin + 16));
                 }
@@ -119,6 +90,28 @@ namespace ToDoList.Utilities
             var writer = new System.IO.StringWriter();
             content.WriteTo(writer, HtmlEncoder.Default);
             return writer.ToString();
+        }
+
+        private static TagBuilder BuildLiLink(IHtmlHelper<IndexModel> helper, string className, string action, int id, string fontAwesomeClass)
+        {
+            // generate li for details
+            TagBuilder li = new TagBuilder("li");
+            li.AddCssClass(className);
+
+            // generate link for details
+            TagBuilder a = new TagBuilder("a");
+            a.MergeAttribute("href", $"./{action}?id={id}");
+
+            // generate font-awesome for details
+            TagBuilder i = new TagBuilder("i");
+            i.AddCssClass("fas");
+            i.AddCssClass(fontAwesomeClass);
+
+            // embed font-awesome and link in li
+            a.InnerHtml.AppendHtml(i);
+            li.InnerHtml.AppendHtml(a);
+
+            return li;
         }
     }
 }
