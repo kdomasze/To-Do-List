@@ -41,6 +41,36 @@ namespace ToDoList.Models
             return output;
         }
 
+        /// <summary>
+        /// Returns a list of <c>EntryList</c>s based on a list of <c>Entry</c>s.
+        /// </summary>
+        /// <param name="entryList">List of <c>Entry</c>s to base list on.</param>
+        /// <returns>List of <c>EntryList</c>s</returns>
+        public static IList<EntryItem> GetEntryItemList(List<Entry> entryList)
+        {
+            IList<EntryItem> EntryItemList = new List<EntryItem>();
+
+            foreach (var entry in entryList)
+            {
+                if (entry.Parent == 0)
+                {
+                    EntryItemList.Add(new EntryItem(entry));
+                }
+                else
+                {
+                    foreach (var entryItem in EntryItemList)
+                    {
+                        var parentEntryItem = FindParentForEntry(entry, entryItem);
+                        if (parentEntryItem.Entry == null) continue;
+
+                        parentEntryItem.Children.Add(new EntryItem(entry));
+                        break;
+                    }
+                }
+            }
+
+            return EntryItemList;
+        }
     }
 
     public struct EntryItem

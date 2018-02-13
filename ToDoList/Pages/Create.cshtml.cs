@@ -30,12 +30,15 @@ namespace ToDoList.Pages.Entries
                 return Page();
             }            
 
+            /*
+             * Sets default details for internal book keeping.
+             * CreationDate is set to the current DateTime.
+             * Parent is set to the id in the POST data if there is one. Otherwise, it is set to 0.
+             */
             if (String.IsNullOrEmpty(id) || !int.TryParse(id, out int parent)) parent = 0;
-
-            var currentDateTime = System.DateTime.Now;
-            
+                        
             Entry.Parent = parent;
-            Entry.CreationDate = currentDateTime;
+            Entry.CreationDate = DateTime.Now;
 
             _context.Entry.Add(Entry);
             await _context.SaveChangesAsync();

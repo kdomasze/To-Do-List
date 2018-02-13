@@ -21,26 +21,7 @@ namespace ToDoList.Pages.Entries
         {
             var entryList = await _context.Entry.ToListAsync();
 
-            Entries = new List<EntryItem>();
-
-            foreach (var entry in entryList)
-            {
-                if (entry.Parent == 0)
-                {
-                    Entries.Add(new EntryItem(entry));
-                }
-                else
-                {
-                    foreach (var entryItem in this.Entries)
-                    {
-                        var entryListItem = Entry.FindParentForEntry(entry, entryItem);
-                        if (entryListItem.Entry == null) continue;
-
-                        entryListItem.Children.Add(new EntryItem(entry));
-                        break;
-                    }
-                }
-            }
+            Entries = Entry.GetEntryItemList(entryList);
         }
     }
 }

@@ -78,30 +78,11 @@ namespace ToDoList.Pages.Entries
         /// <param name="parentID">The ID marked as completed</param>
         private async Task MarkChildrenEntriesDoneAsync(int parentID)
         {
-            IList<EntryItem> entryList = new List<EntryItem>();
+            var entryList = await _context.Entry.ToListAsync();
 
-            var entries = await _context.Entry.ToListAsync();
-            
-            foreach (var entry in entries)
-            {
-                if (entry.Parent == 0)
-                {
-                    entryList.Add(new EntryItem(entry));
-                }
-                else
-                {
-                    foreach (var entryItem in entryList)
-                    {
-                        var entryListItem = Entry.FindParentForEntry(entry, entryItem);
-                        if (entryListItem.Entry == null) continue;
+            IList<EntryItem> Entries = Entry.GetEntryItemList(entryList);
 
-                        entryListItem.Children.Add(new EntryItem(entry));
-                        break;
-                    }
-                }
-            }
-
-            foreach(var entry in entryList)
+            foreach (var entry in Entries)
             {
                 MarkEntriesCompleted(parentID, entry);
             }
