@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
 using System.Text.Encodings.Web;
+using ToDoList.Models;
 using ToDoList.Pages.Entries;
-using static ToDoList.Pages.Entries.IndexModel;
 
 namespace ToDoList.Utilities
 {

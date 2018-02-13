@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
+using static ToDoList.Pages.Entries.IndexModel;
 
 namespace ToDoList.Pages.Entries
 {
@@ -42,9 +44,9 @@ namespace ToDoList.Pages.Entries
             {
                 return Page();
             }
-
-            Entry.Completed = true;
-            _context.Attach(Entry).State = EntityState.Modified;
+            
+            // marks the task and all children tasks as completed
+            await MarkChildrenEntriesDoneAsync(Entry.ID);
 
             try
             {
@@ -68,6 +70,60 @@ namespace ToDoList.Pages.Entries
         private bool EntryExists(int id)
         {
             return _context.Entry.Any(e => e.ID == id);
+        }
+
+        /// <summary>
+        /// Marks all entries who's ID or parent ID matches <c>parentID</c>, and all children of those entries as completed.
+        /// </summary>
+        /// <param name="parentID">The ID marked as completed</param>
+        private async Task MarkChildrenEntriesDoneAsync(int parentID)
+        {
+            IList<EntryItem> entryList = new List<EntryItem>();
+
+            var entries = await _context.Entry.ToListAsync();
+            
+            foreach (var entry in entries)
+            {
+                if (entry.Parent == 0)
+                {
+                    entryList.Add(new EntryItem(entry));
+                }
+                else
+                {
+                    foreach (var entryItem in entryList)
+                    {
+                        var entryListItem = Entry.FindParentForEntry(entry, entryItem);
+                        if (entryListItem.Entry == null) continue;
+
+                        entryListItem.Children.Add(new EntryItem(entry));
+                        break;
+                    }
+                }
+            }
+
+            foreach(var entry in entryList)
+            {
+                MarkEntriesCompleted(parentID, entry);
+            }
+        }
+
+        /// <summary>
+        /// Recursively marks entries as completed if the parentID matches the entry's ID or Parent ID field
+        /// </summary>
+        /// <param name="parentID">The ID marked as completed</param>
+        /// <param name="entryItem">An entry Item being marked for completion</param>
+        private void MarkEntriesCompleted(int parentID, EntryItem entryItem)
+        {
+            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID) return;
+
+            // marks entry as complete and needed to be updated
+            entryItem.Entry.Completed = true;
+            _context.Attach(entryItem.Entry).State = EntityState.Modified;
+
+            foreach (EntryItem children in entryItem.Children)
+            {
+                MarkEntriesCompleted(entryItem.Entry.ID, children);
+            }
         }
     }
 }
