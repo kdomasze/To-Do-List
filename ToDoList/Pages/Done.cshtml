@@ -1,0 +1,48 @@
+﻿@page
+@model ToDoList.Pages.Entries.DoneModel
+@{
+    ViewData["Title"] = "Mark Done";
+}
+
+<h2>Mark Done</h2>
+
+<div>
+    <p>If you have any sub-tasks under this entry, they will all be marked done and removed.<br /></p>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.CreationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.CreationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.DueDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.DueDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Entry.Completed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Entry.Completed)
+        </dd>
+    </dl>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Entry.ID" />
+        <input type="hidden" asp-for="Entry.CreationDate" />
+        <input type="hidden" asp-for="Entry.Parent" />
+        <input type="hidden" asp-for="Entry.Title" />
+        <input type="hidden" asp-for="Entry.DueDate" />
+        <input type="submit" value="Mark Done" class="btn btn-default" /> |
+        <a asp-page="Index">Back to List</a>
+    </form>
+</div>
