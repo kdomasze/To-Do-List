@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ToDoList.Models
 {
@@ -41,7 +39,7 @@ namespace ToDoList.Models
                         Parent = 1,
                         CreationDate = DateTime.Parse("2018-2-9"),
                         DueDate = DateTime.Parse("2018-2-15"),
-                        Completed = true
+                        Completed = false
                     },
                     new Entry
                     {
@@ -49,7 +47,7 @@ namespace ToDoList.Models
                         Parent = 2,
                         CreationDate = DateTime.Parse("2018-2-9"),
                         DueDate = DateTime.Parse("2018-2-15"),
-                        Completed = true
+                        Completed = false
                     },
                     new Entry
                     {

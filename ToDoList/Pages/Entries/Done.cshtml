@@ -1,0 +1,30 @@
+﻿@page
+@model ToDoList.Pages.Entries.DoneModel
+@{
+    ViewData["Title"] = "Mark Done";
+}
+
+<h2>Mark Done</h2>
+
+<h4>Entry</h4>
+<hr />
+<p>If you have any sub-tasks under this entry, they will all be marked done and removed.<br /></p>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Entry.ID" />
+            <input type="hidden" asp-for="Entry.CreationDate" />
+            <input type="hidden" asp-for="Entry.Parent" />
+            <input type="hidden" asp-for="Entry.Title" />
+            <input type="hidden" asp-for="Entry.DueDate" />
+            <div class="form-group">
+                <input type="submit" value="Mark Done" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>

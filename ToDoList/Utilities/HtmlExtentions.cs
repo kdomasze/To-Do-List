@@ -1,15 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using ToDoList.Pages.Entries;
 using static ToDoList.Pages.Entries.IndexModel;
 
@@ -31,6 +23,8 @@ namespace ToDoList.Utilities
             {
                 foreach (EntryItem item in entry.Children)
                 {
+                    if (item.Entry.Completed) continue;
+
                     // generate div
                     TagBuilder divStyled = new TagBuilder("div");
                     divStyled.AddCssClass("entry-container");
@@ -51,10 +45,8 @@ namespace ToDoList.Utilities
                     liDueDate.InnerHtml.Append("Due: ");
                     liDueDate.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.DueDate));
 
-                    // generate li for completed
-                    TagBuilder liCompleted = new TagBuilder("li");
-                    liCompleted.AddCssClass("entry-completed");
-                    liCompleted.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.Completed));
+                    // details link
+                    TagBuilder liCompleted = BuildLiLink(helper, "entry-completed", "Done", item.Entry.ID, "fa-check");
 
                     // details link
                     TagBuilder liDetails = BuildLiLink(helper, "entry-details", "Details", item.Entry.ID, "fa-info-circle");

@@ -14,32 +14,18 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Entry.ID" />
+            <input type="hidden" asp-for="Entry.Completed" />
+            <input type="hidden" asp-for="Entry.CreationDate" />
+            <input type="hidden" asp-for="Entry.Parent" />
             <div class="form-group">
                 <label asp-for="Entry.Title" class="control-label"></label>
                 <input asp-for="Entry.Title" class="form-control" />
                 <span asp-validation-for="Entry.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Entry.CreationDate" class="control-label"></label>
-                <input asp-for="Entry.CreationDate" class="form-control" />
-                <span asp-validation-for="Entry.CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Entry.DueDate" class="control-label"></label>
                 <input asp-for="Entry.DueDate" class="form-control" />
                 <span asp-validation-for="Entry.DueDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Entry.Completed" /> @Html.DisplayNameFor(model => model.Entry.Completed)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Entry.Parent" class="control-label"></label>
-                <input asp-for="Entry.Parent" class="form-control" />
-                <span asp-validation-for="Entry.Parent" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

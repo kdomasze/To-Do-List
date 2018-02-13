@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,11 +7,11 @@ using ToDoList.Models;
 
 namespace ToDoList.Pages.Entries
 {
-    public class EditModel : PageModel
+    public class DoneModel : PageModel
     {
-        private readonly ToDoList.Models.EntryContext _context;
+        private readonly EntryContext _context;
 
-        public EditModel(ToDoList.Models.EntryContext context)
+        public DoneModel(EntryContext context)
         {
             _context = context;
         }
@@ -32,6 +32,7 @@ namespace ToDoList.Pages.Entries
             {
                 return NotFound();
             }
+
             return Page();
         }
 
@@ -42,6 +43,7 @@ namespace ToDoList.Pages.Entries
                 return Page();
             }
 
+            Entry.Completed = true;
             _context.Attach(Entry).State = EntityState.Modified;
 
             try
