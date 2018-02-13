@@ -8,9 +8,9 @@ namespace ToDoList.Pages.Entries
 {
     public class IndexModel : PageModel
     {
-        private readonly ToDoList.Models.EntryContext _context;
+        private readonly EntryContext _context;
 
-        public IndexModel(ToDoList.Models.EntryContext context)
+        public IndexModel(EntryContext context)
         {
             _context = context;
         }

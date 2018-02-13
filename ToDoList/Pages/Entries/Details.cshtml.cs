@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,9 +8,9 @@ namespace ToDoList.Pages.Entries
 {
     public class DetailsModel : PageModel
     {
-        private readonly ToDoList.Models.EntryContext _context;
+        private readonly EntryContext _context;
 
-        public DetailsModel(ToDoList.Models.EntryContext context)
+        public DetailsModel(EntryContext context)
         {
             _context = context;
         }

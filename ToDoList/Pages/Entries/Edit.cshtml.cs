@@ -9,9 +9,9 @@ namespace ToDoList.Pages.Entries
 {
     public class EditModel : PageModel
     {
-        private readonly ToDoList.Models.EntryContext _context;
+        private readonly EntryContext _context;
 
-        public EditModel(ToDoList.Models.EntryContext context)
+        public EditModel(EntryContext context)
         {
             _context = context;
         }

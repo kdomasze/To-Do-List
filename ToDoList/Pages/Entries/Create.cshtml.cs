@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDoList.Models;
 
 namespace ToDoList.Pages.Entries
 {
     public class CreateModel : PageModel
     {
-        private readonly ToDoList.Models.EntryContext _context;
+        private readonly EntryContext _context;
 
-        public CreateModel(ToDoList.Models.EntryContext context)
+        public CreateModel(EntryContext context)
         {
             _context = context;
         }
