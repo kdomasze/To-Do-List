@@ -61,7 +61,15 @@ namespace ToDoList.Pages.Entries
 
         private async Task DeleteEntriesAsync(int? parentID, EntryItem entryItem)
         {
-            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID) return;
+            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID)
+            {
+                foreach (EntryItem children in entryItem.Children)
+                {
+                    await DeleteEntriesAsync(parentID, children);
+                }
+
+                return;
+            }
 
             // delete entry
             Entry = await _context.Entry.FindAsync(entryItem.Entry.ID);

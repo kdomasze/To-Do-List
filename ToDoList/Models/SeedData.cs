@@ -64,6 +64,30 @@ namespace ToDoList.Models
                         CreationDate = DateTime.Parse("2018-2-7"),
                         DueDate = DateTime.Parse("2018-2-12"),
                         Completed = false
+                    },
+                    new Entry
+                    {
+                        Title = "Entry 7",
+                        Parent = 2,
+                        CreationDate = DateTime.Parse("2018-2-7"),
+                        DueDate = DateTime.Parse("2018-2-12"),
+                        Completed = false
+                    },
+                    new Entry
+                    {
+                        Title = "Entry 8",
+                        Parent = 2,
+                        CreationDate = DateTime.Parse("2018-2-7"),
+                        DueDate = DateTime.Parse("2018-2-12"),
+                        Completed = false
+                    },
+                    new Entry
+                    {
+                        Title = "Entry 9",
+                        Parent = 8,
+                        CreationDate = DateTime.Parse("2018-2-7"),
+                        DueDate = DateTime.Parse("2018-2-12"),
+                        Completed = false
                     }
                 );
                 context.SaveChanges();
