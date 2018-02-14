@@ -72,6 +72,48 @@ namespace ToDoList.Models
 
             return TaskItemList;
         }
+
+        /// <summary>
+        /// Performs the specified action on all tasks who's ID or parent ID matches <c>parentID</c>, and all children of those tasks.
+        /// </summary>
+        /// <param name="taskList">List of all <c>Task</c>s</param>
+        /// <param name="parentID">The ID of the root <c>Task</c></param>
+        /// <param name="action">The action to be applied to all <c>Task</c>s who are children of the <c>parentID</c></param>
+        public void PerformActionOnChildrenTasks(List<Task> taskList, int parentID, Action<TaskItem> action)
+        {
+            IList<TaskItem> Tasks = GetTaskItemList(taskList);
+
+            foreach (var task in Tasks)
+            {
+                PerformAction(parentID, task, action);
+            }
+        }
+
+        /// <summary>
+        /// Recursively performs the specified action on tasks if the parentID matches the task's ID or Parent ID field
+        /// </summary>
+        /// <param name="parentID">The ID of the root <c>Task</c></param>
+        /// <param name="taskItem">The task item being checked to have the <c>action</c> applied to it</param>
+        /// <param name="action">The action to be applied to all <c>Task</c>s who are children of the <c>parentID</c></param>
+        private void PerformAction(int parentID, TaskItem taskItem, Action<TaskItem> action)
+        {
+            if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
+            {
+                foreach (TaskItem children in taskItem.Children)
+                {
+                    PerformAction(parentID, children, action);
+                }
+
+                return;
+            }
+
+            action(taskItem);
+
+            foreach (TaskItem children in taskItem.Children)
+            {
+                PerformAction(taskItem.Task.ID, children, action);
+            }
+        }
     }
 
     public struct TaskItem

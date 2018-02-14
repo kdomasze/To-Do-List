@@ -37,52 +37,20 @@ namespace ToDoList.Pages.Tasks
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            
-            await DeleteChildrenTasksAsync(id);
+            if (id == null) return NotFound();
+
+            // delete the task and all children tasks
+            Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), (int)id, DeleteTask);
 
             return RedirectToPage("./Index");
         }
 
-        private async System.Threading.Tasks.Task DeleteChildrenTasksAsync(int? parentID)
+        private void DeleteTask(TaskItem taskItem)
         {
-            var taskList = await _context.Task.ToListAsync();
-
-            IList<TaskItem> Tasks = Models.Task.GetTaskItemList(taskList);
-
-            foreach (var task in Tasks)
+            if (taskItem.Task != null)
             {
-                await DeleteTasksAsync(parentID, task);
-            }
-        }
-
-        private async System.Threading.Tasks.Task DeleteTasksAsync(int? parentID, TaskItem taskItem)
-        {
-            if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
-            {
-                foreach (TaskItem children in taskItem.Children)
-                {
-                    await DeleteTasksAsync(parentID, children);
-                }
-
-                return;
-            }
-
-            // delete task
-            Task = await _context.Task.FindAsync(taskItem.Task.ID);
-
-            if (Task != null)
-            {
-                _context.Task.Remove(Task);
-                await _context.SaveChangesAsync();
-            }
-
-            foreach (TaskItem children in taskItem.Children)
-            {
-                await DeleteTasksAsync(taskItem.Task.ID, children);
+                _context.Task.Remove(taskItem.Task);
+                _context.SaveChangesAsync();
             }
         }
     }

@@ -44,9 +44,9 @@ namespace ToDoList.Pages.Tasks
             {
                 return Page();
             }
-            
+
             // marks the task and all children tasks as completed
-            await MarkChildrenTasksDoneAsync(Task.ID);
+            Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), Task.ID, MarkTaskComplete);
 
             try
             {
@@ -72,47 +72,10 @@ namespace ToDoList.Pages.Tasks
             return _context.Task.Any(e => e.ID == id);
         }
 
-        /// <summary>
-        /// Marks all tasks who's ID or parent ID matches <c>parentID</c>, and all children of those tasks as completed.
-        /// </summary>
-        /// <param name="parentID">The ID marked as completed</param>
-        private async System.Threading.Tasks.Task MarkChildrenTasksDoneAsync(int parentID)
+        private void MarkTaskComplete(TaskItem taskItem)
         {
-            var taskList = await _context.Task.ToListAsync();
-
-            IList<TaskItem> Tasks = Models.Task.GetTaskItemList(taskList);
-
-            foreach (var task in Tasks)
-            {
-                MarkTasksCompleted(parentID, task);
-            }
-        }
-
-        /// <summary>
-        /// Recursively marks tasks as completed if the parentID matches the task's ID or Parent ID field
-        /// </summary>
-        /// <param name="parentID">The ID marked as completed</param>
-        /// <param name="taskItem">An task item being marked for completion</param>
-        private void MarkTasksCompleted(int parentID, TaskItem taskItem)
-        {
-            if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
-            {
-                foreach (TaskItem children in taskItem.Children)
-                {
-                    MarkTasksCompleted(parentID, children);
-                }
-
-                return;
-            }
-
-            // marks task as complete and needed to be updated
             taskItem.Task.Completed = true;
             _context.Attach(taskItem.Task).State = EntityState.Modified;
-
-            foreach (TaskItem children in taskItem.Children)
-            {
-                MarkTasksCompleted(taskItem.Task.ID, children);
-            }
         }
     }
 }
