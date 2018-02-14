@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ToDoList.Validation;
 
 namespace ToDoList.Models
 {
     public class Task
     {
         public int ID { get; set; }
+        [Display(Name = "Task")]
         public string Title { get; set; }
+        [Display(Name = "Creation Date")]
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
+        [Display(Name = "Due Date")]
         [DataType(DataType.Date)]
+        [DateGreaterOrEqualToToday()]
         public DateTime DueDate { get; set; }
         [Display(Name = "Completed")]
         public bool Completed { get; set; }
