@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -40,8 +41,30 @@ namespace ToDoList.Pages.Entries
             {
                 return NotFound();
             }
+            
+            await DeleteChildrenEntriesAsync(id);
 
-            Entry = await _context.Entry.FindAsync(id);
+            return RedirectToPage("./Index");
+        }
+
+        private async Task DeleteChildrenEntriesAsync(int? parentID)
+        {
+            var entryList = await _context.Entry.ToListAsync();
+
+            IList<EntryItem> Entries = Entry.GetEntryItemList(entryList);
+
+            foreach (var entry in Entries)
+            {
+                await DeleteEntriesAsync(parentID, entry);
+            }
+        }
+
+        private async Task DeleteEntriesAsync(int? parentID, EntryItem entryItem)
+        {
+            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID) return;
+
+            // delete entry
+            Entry = await _context.Entry.FindAsync(entryItem.Entry.ID);
 
             if (Entry != null)
             {
@@ -49,7 +72,10 @@ namespace ToDoList.Pages.Entries
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            foreach (EntryItem children in entryItem.Children)
+            {
+                await DeleteEntriesAsync(entryItem.Entry.ID, children);
+            }
         }
     }
 }
