@@ -31,6 +31,7 @@ namespace ToDoList.Models
                 foreach (EntryItem children in entryItem.Children)
                 {
                     output = FindParentForEntry(entry, children);
+                    if (output.Entry != null) break;
                 }
             }
             else
