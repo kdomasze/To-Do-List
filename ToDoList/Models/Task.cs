@@ -84,7 +84,7 @@ namespace ToDoList.Models
         /// <param name="taskList">List of all <c>Task</c>s</param>
         /// <param name="parentID">The ID of the root <c>Task</c></param>
         /// <param name="action">The action to be applied to all <c>Task</c>s who are children of the <c>parentID</c></param>
-        public void PerformActionOnChildrenTasks(List<Task> taskList, int parentID, Action<TaskItem> action)
+        public static void PerformActionOnChildrenTasks(List<Task> taskList, int parentID, Action<TaskItem> action)
         {
             IList<TaskItem> Tasks = GetTaskItemList(taskList);
 
@@ -100,7 +100,7 @@ namespace ToDoList.Models
         /// <param name="parentID">The ID of the root <c>Task</c></param>
         /// <param name="taskItem">The task item being checked to have the <c>action</c> applied to it</param>
         /// <param name="action">The action to be applied to all <c>Task</c>s who are children of the <c>parentID</c></param>
-        private void PerformAction(int parentID, TaskItem taskItem, Action<TaskItem> action)
+        private static void PerformAction(int parentID, TaskItem taskItem, Action<TaskItem> action)
         {
             if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
             {

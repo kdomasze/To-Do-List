@@ -39,7 +39,7 @@ namespace ToDoList.Pages.Tasks
             if (id == null) return NotFound();
 
             // delete the task and all children tasks
-            Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), (int)id, DeleteTask);
+            Models.Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), (int)id, DeleteTask);
 
             return RedirectToPage("./Index");
         }

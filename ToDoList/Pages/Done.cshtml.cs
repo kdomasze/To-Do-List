@@ -44,7 +44,7 @@ namespace ToDoList.Pages.Tasks
             }
 
             // marks the task and all children tasks as completed
-            Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), Task.ID, MarkTaskComplete);
+            Models.Task.PerformActionOnChildrenTasks(await _context.Task.ToListAsync(), Task.ID, MarkTaskComplete);
 
             try
             {
