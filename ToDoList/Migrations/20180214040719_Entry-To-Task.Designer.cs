@@ -11,9 +11,10 @@ using ToDoList.Models;
 namespace ToDoList.Migrations
 {
     [DbContext(typeof(TaskContext))]
-    partial class EntryContextModelSnapshot : ModelSnapshot
+    [Migration("20180214040719_Entry-To-Task")]
+    partial class EntryToTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

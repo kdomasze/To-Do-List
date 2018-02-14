@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class DeleteModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public DeleteModel(EntryContext context)
+        public DeleteModel(TaskContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Entry Entry { get; set; }
+        public Models.Task Task { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -26,9 +26,9 @@ namespace ToDoList.Pages.Entries
                 return NotFound();
             }
 
-            Entry = await _context.Entry.SingleOrDefaultAsync(m => m.ID == id);
+            Task = await _context.Task.SingleOrDefaultAsync(m => m.ID == id);
 
-            if (Entry == null)
+            if (Task == null)
             {
                 return NotFound();
             }
@@ -42,47 +42,47 @@ namespace ToDoList.Pages.Entries
                 return NotFound();
             }
             
-            await DeleteChildrenEntriesAsync(id);
+            await DeleteChildrenTasksAsync(id);
 
             return RedirectToPage("./Index");
         }
 
-        private async Task DeleteChildrenEntriesAsync(int? parentID)
+        private async System.Threading.Tasks.Task DeleteChildrenTasksAsync(int? parentID)
         {
-            var entryList = await _context.Entry.ToListAsync();
+            var taskList = await _context.Task.ToListAsync();
 
-            IList<EntryItem> Entries = Entry.GetEntryItemList(entryList);
+            IList<TaskItem> Tasks = Models.Task.GetTaskItemList(taskList);
 
-            foreach (var entry in Entries)
+            foreach (var task in Tasks)
             {
-                await DeleteEntriesAsync(parentID, entry);
+                await DeleteTasksAsync(parentID, task);
             }
         }
 
-        private async Task DeleteEntriesAsync(int? parentID, EntryItem entryItem)
+        private async System.Threading.Tasks.Task DeleteTasksAsync(int? parentID, TaskItem taskItem)
         {
-            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID)
+            if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
             {
-                foreach (EntryItem children in entryItem.Children)
+                foreach (TaskItem children in taskItem.Children)
                 {
-                    await DeleteEntriesAsync(parentID, children);
+                    await DeleteTasksAsync(parentID, children);
                 }
 
                 return;
             }
 
-            // delete entry
-            Entry = await _context.Entry.FindAsync(entryItem.Entry.ID);
+            // delete task
+            Task = await _context.Task.FindAsync(taskItem.Task.ID);
 
-            if (Entry != null)
+            if (Task != null)
             {
-                _context.Entry.Remove(Entry);
+                _context.Task.Remove(Task);
                 await _context.SaveChangesAsync();
             }
 
-            foreach (EntryItem children in entryItem.Children)
+            foreach (TaskItem children in taskItem.Children)
             {
-                await DeleteEntriesAsync(entryItem.Entry.ID, children);
+                await DeleteTasksAsync(taskItem.Task.ID, children);
             }
         }
     }

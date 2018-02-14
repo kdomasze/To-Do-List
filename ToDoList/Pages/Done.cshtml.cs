@@ -5,21 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
-using static ToDoList.Pages.Entries.IndexModel;
+using static ToDoList.Pages.Tasks.IndexModel;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class DoneModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public DoneModel(EntryContext context)
+        public DoneModel(TaskContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Entry Entry { get; set; }
+        public Models.Task Task { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,9 +28,9 @@ namespace ToDoList.Pages.Entries
                 return NotFound();
             }
 
-            Entry = await _context.Entry.SingleOrDefaultAsync(m => m.ID == id);
+            Task = await _context.Task.SingleOrDefaultAsync(m => m.ID == id);
 
-            if (Entry == null)
+            if (Task == null)
             {
                 return NotFound();
             }
@@ -46,7 +46,7 @@ namespace ToDoList.Pages.Entries
             }
             
             // marks the task and all children tasks as completed
-            await MarkChildrenEntriesDoneAsync(Entry.ID);
+            await MarkChildrenTasksDoneAsync(Task.ID);
 
             try
             {
@@ -54,7 +54,7 @@ namespace ToDoList.Pages.Entries
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EntryExists(Entry.ID))
+                if (!TaskExists(Task.ID))
                 {
                     return NotFound();
                 }
@@ -67,43 +67,51 @@ namespace ToDoList.Pages.Entries
             return RedirectToPage("./Index");
         }
 
-        private bool EntryExists(int id)
+        private bool TaskExists(int id)
         {
-            return _context.Entry.Any(e => e.ID == id);
+            return _context.Task.Any(e => e.ID == id);
         }
 
         /// <summary>
-        /// Marks all entries who's ID or parent ID matches <c>parentID</c>, and all children of those entries as completed.
+        /// Marks all tasks who's ID or parent ID matches <c>parentID</c>, and all children of those tasks as completed.
         /// </summary>
         /// <param name="parentID">The ID marked as completed</param>
-        private async Task MarkChildrenEntriesDoneAsync(int parentID)
+        private async System.Threading.Tasks.Task MarkChildrenTasksDoneAsync(int parentID)
         {
-            var entryList = await _context.Entry.ToListAsync();
+            var taskList = await _context.Task.ToListAsync();
 
-            IList<EntryItem> Entries = Entry.GetEntryItemList(entryList);
+            IList<TaskItem> Tasks = Models.Task.GetTaskItemList(taskList);
 
-            foreach (var entry in Entries)
+            foreach (var task in Tasks)
             {
-                MarkEntriesCompleted(parentID, entry);
+                MarkTasksCompleted(parentID, task);
             }
         }
 
         /// <summary>
-        /// Recursively marks entries as completed if the parentID matches the entry's ID or Parent ID field
+        /// Recursively marks tasks as completed if the parentID matches the task's ID or Parent ID field
         /// </summary>
         /// <param name="parentID">The ID marked as completed</param>
-        /// <param name="entryItem">An entry Item being marked for completion</param>
-        private void MarkEntriesCompleted(int parentID, EntryItem entryItem)
+        /// <param name="taskItem">An task item being marked for completion</param>
+        private void MarkTasksCompleted(int parentID, TaskItem taskItem)
         {
-            if (entryItem.Entry.Parent != parentID && entryItem.Entry.ID != parentID) return;
-
-            // marks entry as complete and needed to be updated
-            entryItem.Entry.Completed = true;
-            _context.Attach(entryItem.Entry).State = EntityState.Modified;
-
-            foreach (EntryItem children in entryItem.Children)
+            if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
             {
-                MarkEntriesCompleted(entryItem.Entry.ID, children);
+                foreach (TaskItem children in taskItem.Children)
+                {
+                    MarkTasksCompleted(parentID, children);
+                }
+
+                return;
+            }
+
+            // marks task as complete and needed to be updated
+            taskItem.Task.Completed = true;
+            _context.Attach(taskItem.Task).State = EntityState.Modified;
+
+            foreach (TaskItem children in taskItem.Children)
+            {
+                MarkTasksCompleted(taskItem.Task.ID, children);
             }
         }
     }

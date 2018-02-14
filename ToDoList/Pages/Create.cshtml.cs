@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ToDoList.Models;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class CreateModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public CreateModel(EntryContext context)
+        public CreateModel(TaskContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace ToDoList.Pages.Entries
         }
 
         [BindProperty]
-        public Entry Entry { get; set; }
+        public Models.Task Task { get; set; }
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
@@ -37,10 +37,10 @@ namespace ToDoList.Pages.Entries
              */
             if (String.IsNullOrEmpty(id) || !int.TryParse(id, out int parent)) parent = 0;
                         
-            Entry.Parent = parent;
-            Entry.CreationDate = DateTime.Now;
+            Task.Parent = parent;
+            Task.CreationDate = DateTime.Now;
 
-            _context.Entry.Add(Entry);
+            _context.Task.Add(Task);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

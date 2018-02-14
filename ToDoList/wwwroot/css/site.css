@@ -21,20 +21,20 @@ body {
     width: 100%;
 }
 
-.entry-item {
+.task-item {
     width: 50%;
     display: grid;
     grid-template-columns: auto auto 5% 5% 5% 5%;
-    grid-template-areas: "entry-title entry-due-date entry-complete entry-details entry-delete entry-add";
+    grid-template-areas: "task-title task-due-date task-complete task-details task-delete task-add";
     list-style: none;
     text-align: right;
 }
 
-.entry-container {
+.task-container {
     vertical-align: top;
 }
 
-.entry-title {
+.task-title {
     border-left: 1px solid #eee;
     text-align: center;
 }

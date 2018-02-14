@@ -1,5 +1,5 @@
 @page
-@model ToDoList.Pages.Entries.CreateModel
+@model ToDoList.Pages.Tasks.CreateModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,21 +7,21 @@
 
 <h2>Create</h2>
 
-<h4>Entry</h4>
+<h4>Task</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Entry.Title" class="control-label"></label>
-                <input asp-for="Entry.Title" class="form-control" />
-                <span asp-validation-for="Entry.Title" class="text-danger"></span>
+                <label asp-for="Task.Title" class="control-label"></label>
+                <input asp-for="Task.Title" class="form-control" />
+                <span asp-validation-for="Task.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Entry.DueDate" class="control-label"></label>
-                <input asp-for="Entry.DueDate" class="form-control" />
-                <span asp-validation-for="Entry.DueDate" class="text-danger"></span>
+                <label asp-for="Task.DueDate" class="control-label"></label>
+                <input asp-for="Task.DueDate" class="form-control" />
+                <span asp-validation-for="Task.DueDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

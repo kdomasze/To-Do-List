@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class EditModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public EditModel(EntryContext context)
+        public EditModel(TaskContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Entry Entry { get; set; }
+        public Models.Task Task { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -26,9 +26,9 @@ namespace ToDoList.Pages.Entries
                 return NotFound();
             }
 
-            Entry = await _context.Entry.SingleOrDefaultAsync(m => m.ID == id);
+            Task = await _context.Task.SingleOrDefaultAsync(m => m.ID == id);
 
-            if (Entry == null)
+            if (Task == null)
             {
                 return NotFound();
             }
@@ -42,7 +42,7 @@ namespace ToDoList.Pages.Entries
                 return Page();
             }
 
-            _context.Attach(Entry).State = EntityState.Modified;
+            _context.Attach((Models.Task)Task).State = EntityState.Modified;
 
             try
             {
@@ -50,7 +50,7 @@ namespace ToDoList.Pages.Entries
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EntryExists(Entry.ID))
+                if (!TaskExists(Task.ID))
                 {
                     return NotFound();
                 }
@@ -63,9 +63,9 @@ namespace ToDoList.Pages.Entries
             return RedirectToPage("./Index");
         }
 
-        private bool EntryExists(int id)
+        private bool TaskExists(int id)
         {
-            return _context.Entry.Any(e => e.ID == id);
+            return _context.Task.Any(e => e.ID == id);
         }
     }
 }

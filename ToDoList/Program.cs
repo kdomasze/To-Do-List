@@ -20,7 +20,7 @@ namespace ToDoList
 
                 try
                 {
-                    var context = services.GetRequiredService<EntryContext>();
+                    var context = services.GetRequiredService<TaskContext>();
                     // requires using Microsoft.EntityFrameworkCore;
                     context.Database.Migrate();
                     // Requires using RazorPagesMovie.Models;

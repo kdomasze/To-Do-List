@@ -1,27 +1,26 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class IndexModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public IndexModel(EntryContext context)
+        public IndexModel(TaskContext context)
         {
             _context = context;
         }
 
-        public IList<EntryItem> Entries { get; set; }
+        public IList<TaskItem> Tasks { get; set; }
 
-        public async Task OnGetAsync()
+        public async System.Threading.Tasks.Task OnGetAsync()
         {
-            var entryList = await _context.Entry.ToListAsync();
+            var taskList = await _context.Task.ToListAsync();
 
-            Entries = Entry.GetEntryItemList(entryList);
+            Tasks = Models.Task.GetTaskItemList(taskList);
         }
     }
 }

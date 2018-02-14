@@ -4,18 +4,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 
-namespace ToDoList.Pages.Entries
+namespace ToDoList.Pages.Tasks
 {
     public class DetailsModel : PageModel
     {
-        private readonly EntryContext _context;
+        private readonly TaskContext _context;
 
-        public DetailsModel(EntryContext context)
+        public DetailsModel(TaskContext context)
         {
             _context = context;
         }
 
-        public Entry Entry { get; set; }
+        public Models.Task Task { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -24,9 +24,9 @@ namespace ToDoList.Pages.Entries
                 return NotFound();
             }
 
-            Entry = await _context.Entry.SingleOrDefaultAsync(m => m.ID == id);
+            Task = await _context.Task.SingleOrDefaultAsync(m => m.ID == id);
 
-            if (Entry == null)
+            if (Task == null)
             {
                 return NotFound();
             }

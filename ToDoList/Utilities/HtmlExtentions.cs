@@ -3,59 +3,59 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
 using System.Text.Encodings.Web;
 using ToDoList.Models;
-using ToDoList.Pages.Entries;
+using ToDoList.Pages.Tasks;
 
 namespace ToDoList.Utilities
 {
     public static class HtmlExtentions
     {
         /// <summary>
-        /// Special helper function that prints the todo list entries recursively if there are any children entries to be printed
+        /// Special helper function that prints the todo list tasks recursively if there are any children tasks to be printed
         /// </summary>
         /// <param name="helper">Reference to the IHtmlHelper.</param>
-        /// <param name="entry">The entry item to check for children entries.</param>
+        /// <param name="Task">The task item to check for children tasks.</param>
         /// <param name="startMargin">the margin that the children elements will start their indent from.</param>
         /// <returns>The complete HTML content to be rendered</returns>
-        public static IHtmlContent PrintEntry(this IHtmlHelper<IndexModel> helper, EntryItem entry, int startMargin = 20)
+        public static IHtmlContent PrintTask(this IHtmlHelper<IndexModel> helper, TaskItem Task, int startMargin = 20)
         {
             StringBuilder output = new StringBuilder();
-            if (entry.Children.Count > 0)
+            if (Task.Children.Count > 0)
             {
-                foreach (EntryItem item in entry.Children)
+                foreach (TaskItem item in Task.Children)
                 {
-                    if (item.Entry.Completed) continue;
+                    if (item.Task.Completed) continue;
 
                     // generate div
                     TagBuilder divStyled = new TagBuilder("div");
-                    divStyled.AddCssClass("entry-container");
+                    divStyled.AddCssClass("task-container");
                     divStyled.MergeAttribute("style", $"padding-left: {startMargin}px;");
 
                     // generate ul
                     TagBuilder ul = new TagBuilder("ul");
-                    ul.AddCssClass("entry-item");
+                    ul.AddCssClass("task-item");
 
                     // generate li for title
                     TagBuilder liTitle = new TagBuilder("li");
-                    liTitle.AddCssClass("entry-title");
-                    liTitle.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.Title));
+                    liTitle.AddCssClass("task-title");
+                    liTitle.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Task.Title));
 
                     // generate li for due date
                     TagBuilder liDueDate = new TagBuilder("li");
-                    liDueDate.AddCssClass("entry-due-date");
+                    liDueDate.AddCssClass("task-due-date");
                     liDueDate.InnerHtml.Append("Due: ");
-                    liDueDate.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Entry.DueDate));
+                    liDueDate.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Task.DueDate));
 
                     // details link
-                    TagBuilder liCompleted = BuildLiLink(helper, "entry-completed", "Done", item.Entry.ID, "fa-check");
+                    TagBuilder liCompleted = BuildLiLink(helper, "task-completed", "Done", item.Task.ID, "fa-check");
 
                     // details link
-                    TagBuilder liDetails = BuildLiLink(helper, "entry-details", "Details", item.Entry.ID, "fa-info-circle");
+                    TagBuilder liDetails = BuildLiLink(helper, "task-details", "Details", item.Task.ID, "fa-info-circle");
 
                     // Delete link
-                    TagBuilder liDelete = BuildLiLink(helper, "entry-delete", "Delete", item.Entry.ID, "fa-trash");
+                    TagBuilder liDelete = BuildLiLink(helper, "task-delete", "Delete", item.Task.ID, "fa-trash");
 
                     // Add link
-                    TagBuilder liAdd = BuildLiLink(helper, "entry-add", "Create", item.Entry.ID, "fa-plus");
+                    TagBuilder liAdd = BuildLiLink(helper, "task-add", "Create", item.Task.ID, "fa-plus");
 
                     // assemble html
                     ul.InnerHtml.AppendHtml(liTitle);
@@ -70,7 +70,7 @@ namespace ToDoList.Utilities
                     // output to string
                     output.Append("<hr />");
                     output.Append(GetString(divStyled));
-                    output.Append(PrintEntry(helper, item, startMargin + 16));
+                    output.Append(PrintTask(helper, item, startMargin + 16));
                 }
             }
 

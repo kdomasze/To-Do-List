@@ -19,7 +19,7 @@ namespace ToDoList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EntryContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EntryContext")));
+            services.AddDbContext<TaskContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskContext")));
             services.AddMvc();
         }
 

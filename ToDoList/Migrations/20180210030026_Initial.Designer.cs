@@ -10,7 +10,7 @@ using ToDoList.Models;
 
 namespace ToDoList.Migrations
 {
-    [DbContext(typeof(EntryContext))]
+    [DbContext(typeof(TaskContext))]
     [Migration("20180210030026_Initial")]
     partial class Initial
     {

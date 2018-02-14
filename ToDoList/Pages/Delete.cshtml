@@ -1,5 +1,5 @@
 @page
-@model ToDoList.Pages.Entries.DeleteModel
+@model ToDoList.Pages.Tasks.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -9,37 +9,31 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <p>Deleting this entry will also delete all children entries.</p>
+    <p>Deleting this task will also delete all children tasks.</p>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.Title)
+            @Html.DisplayNameFor(model => model.Task.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.Title)
+            @Html.DisplayFor(model => model.Task.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.CreationDate)
+            @Html.DisplayNameFor(model => model.Task.CreationDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.CreationDate)
+            @Html.DisplayFor(model => model.Task.CreationDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.DueDate)
+            @Html.DisplayNameFor(model => model.Task.DueDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.DueDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Entry.Completed)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Entry.Completed)
+            @Html.DisplayFor(model => model.Task.DueDate)
         </dd>
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="Entry.ID" />
+        <input type="hidden" asp-for="Task.ID" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-page="./Index">Back to List</a>
     </form>

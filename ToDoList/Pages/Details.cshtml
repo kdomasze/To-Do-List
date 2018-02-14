@@ -1,5 +1,5 @@
 @page
-@model ToDoList.Pages.Entries.DetailsModel
+@model ToDoList.Pages.Tasks.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,32 +11,32 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.Title)
+            @Html.DisplayNameFor(model => model.Task.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.Title)
+            @Html.DisplayFor(model => model.Task.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.CreationDate)
+            @Html.DisplayNameFor(model => model.Task.CreationDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.CreationDate)
+            @Html.DisplayFor(model => model.Task.CreationDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.DueDate)
+            @Html.DisplayNameFor(model => model.Task.DueDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.DueDate)
+            @Html.DisplayFor(model => model.Task.DueDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Entry.Completed)
+            @Html.DisplayNameFor(model => model.Task.Completed)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Entry.Completed)
+            @Html.DisplayFor(model => model.Task.Completed)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Entry.ID">Edit</a> |
+    <a asp-page="./Edit" asp-route-id="@Model.Task.ID">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>
