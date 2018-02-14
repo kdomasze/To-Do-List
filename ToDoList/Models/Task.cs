@@ -15,33 +15,7 @@ namespace ToDoList.Models
         [Display(Name = "Completed")]
         public bool Completed { get; set; }
         public int Parent { get; set; }
-
-        /// <summary>
-        /// Recursively finds the parent for each <c>task</c>. If no parent is found in the specified <c>taskItem</c>, a nullified version of <c>TaskItem</c> will be returned.
-        /// </summary>
-        /// <param name="task">The child <c>Task</c>.</param>
-        /// <param name="taskItem">The <c>TaskItem</c> to start the search from.</param>
-        /// <returns>The <c>TaskItem</c> that represents the parent of task or a new <c>TaskItem(null)</c>.</returns>
-        public static TaskItem FindParentForTask(Task task, TaskItem taskItem)
-        {
-            TaskItem output = new TaskItem(null);
-
-            if (taskItem.Task.ID != task.Parent)
-            {
-                foreach (TaskItem children in taskItem.Children)
-                {
-                    output = FindParentForTask(task, children);
-                    if (output.Task != null) break;
-                }
-            }
-            else
-            {
-                output = taskItem;
-            }
-
-            return output;
-        }
-
+        
         /// <summary>
         /// Returns a list of <c>TaskList</c>s based on a list of <c>Task</c>s.
         /// </summary>
@@ -62,15 +36,41 @@ namespace ToDoList.Models
                     foreach (var taskItem in TaskItemList)
                     {
                         var parentTaskItem = FindParentForTask(task, taskItem);
-                        if (parentTaskItem.Task == null) continue;
+                        if (parentTaskItem == null) continue;
 
-                        parentTaskItem.Children.Add(new TaskItem(task));
+                        ((TaskItem)parentTaskItem).Children.Add(new TaskItem(task));
                         break;
                     }
                 }
             }
 
             return TaskItemList;
+        }
+
+        /// <summary>
+        /// Recursively finds the parent for each <c>task</c>. If no parent is found in the specified <c>taskItem</c>, a nullified version of <c>TaskItem</c> will be returned.
+        /// </summary>
+        /// <param name="task">The child <c>Task</c>.</param>
+        /// <param name="taskItem">The <c>TaskItem</c> to start the search from.</param>
+        /// <returns>The <c>TaskItem</c> that represents the parent of task or a new <c>TaskItem(null)</c>.</returns>
+        private static TaskItem? FindParentForTask(Task task, TaskItem taskItem)
+        {
+            TaskItem? output = null;
+
+            if (taskItem.Task.ID != task.Parent)
+            {
+                foreach (TaskItem children in taskItem.Children)
+                {
+                    output = FindParentForTask(task, children);
+                    if (output != null) break;
+                }
+            }
+            else
+            {
+                output = taskItem;
+            }
+
+            return output;
         }
 
         /// <summary>
