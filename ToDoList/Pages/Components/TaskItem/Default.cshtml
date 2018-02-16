@@ -1,0 +1,12 @@
+﻿@model ToDoList.Models.Task
+
+<div class="task-container">
+    <ul class="task-item">
+        <li class="task-title">@Html.DisplayFor(modelItem => Model.Title)</li>
+        <li class="task-due-date">Due: @Html.DisplayFor(modelItem => Model.DueDate)</li>
+        <li class="task-complete"><a asp-page="./Done" asp-route-id="@Model.ID"><i class="fas fa-check"></i></a></li>
+        <li class="task-details"><a asp-page="./Details" asp-route-id="@Model.ID"><i class="fas fa-info-circle"></i></a></li>
+        <li class="task-delete"><a asp-page="./Delete" asp-route-id="@Model.ID"><i class="fas fa-trash"></i></a></li>
+        <li class="task-add"><a asp-page="./Create" asp-route-id="@Model.ID"><i class="fas fa-plus"></i></a></li>
+    </ul>
+</div>
