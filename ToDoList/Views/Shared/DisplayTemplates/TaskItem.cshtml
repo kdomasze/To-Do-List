@@ -1,0 +1,16 @@
+﻿@{ 
+    var padding = (int)ViewData["padding"];
+}
+
+@model ToDoList.Models.Task
+
+<div style="padding-left: @(padding)px;" class="task-container">
+    <ul class="task-item">
+        <li class="task-title">@Html.DisplayFor(modelItem => Model.Title)</li>
+        <li class="task-due-date">Due: @Html.DisplayFor(modelItem => Model.DueDate)</li>
+        <li class="task-complete"><a href="./Done?id=@Model.ID"><i class="fas fa-check"></i></a></li>
+        <li class="task-details"><a href="./Details?id=@Model.ID"><i class="fas fa-info-circle"></i></a></li>
+        <li class="task-delete"><a href="./Delete?id=@Model.ID"><i class="fas fa-trash"></i></a></li>
+        <li class="task-add"><a href="./Create?id=@Model.ID"><i class="fas fa-plus"></i></a></li>
+    </ul>
+</div>

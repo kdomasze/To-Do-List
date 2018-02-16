@@ -14,9 +14,9 @@ namespace ToDoList.Utilities
         /// </summary>
         /// <param name="helper">Reference to the IHtmlHelper.</param>
         /// <param name="Task">The task item to check for children tasks.</param>
-        /// <param name="startMargin">the margin that the children elements will start their indent from.</param>
+        /// <param name="startPadding">the margin that the children elements will start their indent from.</param>
         /// <returns>The complete HTML content to be rendered</returns>
-        public static IHtmlContent PrintTask(this IHtmlHelper<IndexModel> helper, TaskItem Task, int startMargin = 20)
+        public static IHtmlContent PrintTask(this IHtmlHelper<IndexModel> helper, TaskItem Task, int startPadding = 20)
         {
             StringBuilder output = new StringBuilder();
             if (Task.Children.Count > 0)
@@ -25,52 +25,11 @@ namespace ToDoList.Utilities
                 {
                     if (item.Task.Completed) continue;
 
-                    // generate div
-                    TagBuilder divStyled = new TagBuilder("div");
-                    divStyled.AddCssClass("task-container");
-                    divStyled.MergeAttribute("style", $"padding-left: {startMargin}px;");
-
-                    // generate ul
-                    TagBuilder ul = new TagBuilder("ul");
-                    ul.AddCssClass("task-item");
-
-                    // generate li for title
-                    TagBuilder liTitle = new TagBuilder("li");
-                    liTitle.AddCssClass("task-title");
-                    liTitle.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Task.Title));
-
-                    // generate li for due date
-                    TagBuilder liDueDate = new TagBuilder("li");
-                    liDueDate.AddCssClass("task-due-date");
-                    liDueDate.InnerHtml.Append("Due: ");
-                    liDueDate.InnerHtml.AppendHtml(helper.DisplayFor(modelItem => item.Task.DueDate));
-
-                    // details link
-                    TagBuilder liCompleted = BuildLiLink(helper, "task-completed", "Done", item.Task.ID, "fa-check");
-
-                    // details link
-                    TagBuilder liDetails = BuildLiLink(helper, "task-details", "Details", item.Task.ID, "fa-info-circle");
-
-                    // Delete link
-                    TagBuilder liDelete = BuildLiLink(helper, "task-delete", "Delete", item.Task.ID, "fa-trash");
-
-                    // Add link
-                    TagBuilder liAdd = BuildLiLink(helper, "task-add", "Create", item.Task.ID, "fa-plus");
-
-                    // assemble html
-                    ul.InnerHtml.AppendHtml(liTitle);
-                    ul.InnerHtml.AppendHtml(liDueDate);
-                    ul.InnerHtml.AppendHtml(liCompleted);
-                    ul.InnerHtml.AppendHtml(liDetails);
-                    ul.InnerHtml.AppendHtml(liDelete);
-                    ul.InnerHtml.AppendHtml(liAdd);
-
-                    divStyled.InnerHtml.AppendHtml(ul);
-
-                    // output to string
+                    var content = helper.DisplayFor(modelItem => item.Task, "TaskItem", new { padding = startPadding });
+                    
                     output.Append("<hr />");
-                    output.Append(GetString(divStyled));
-                    output.Append(PrintTask(helper, item, startMargin + 16));
+                    output.Append(GetString(content));
+                    output.Append(PrintTask(helper, item, startPadding + 16));
                 }
             }
 

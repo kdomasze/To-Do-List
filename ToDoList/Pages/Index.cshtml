@@ -23,6 +23,6 @@
         <hr />
     }
 
-    @await Component.InvokeAsync("TaskItem", item)
+    @Html.DisplayFor(modelItem => item.Task, "TaskItem", new { padding = 0 })
     @Html.PrintTask(item)
 }
