@@ -8,17 +8,19 @@ namespace ToDoList.Models
     public class Task
     {
         public int ID { get; set; }
+
         [Display(Name = "Task")]
         public string Title { get; set; }
-        [Display(Name = "Creation Date")]
-        [DataType(DataType.Date)]
+
+        [Display(Name = "Creation Date"), DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
-        [Display(Name = "Due Date")]
-        [DataType(DataType.Date)]
-        [DateGreaterOrEqualToToday()]
+
+        [Display(Name = "Due Date"), DataType(DataType.Date), DateGreaterOrEqualToToday()]
         public DateTime DueDate { get; set; }
+
         [Display(Name = "Completed")]
         public bool Completed { get; set; }
+
         public int Parent { get; set; }
         
         /// <summary>
@@ -32,24 +34,35 @@ namespace ToDoList.Models
 
             foreach (var task in taskList)
             {
+                // if the parent is the root element, we just add it to the TaskItemList
                 if (task.Parent == 0)
                 {
                     TaskItemList.Add(new TaskItem(task));
                 }
                 else
                 {
-                    foreach (var taskItem in TaskItemList)
-                    {
-                        var parentTaskItem = FindParentForTask(task, taskItem);
-                        if (parentTaskItem == null) continue;
-
-                        ((TaskItem)parentTaskItem).Children.Add(new TaskItem(task));
-                        break;
-                    }
+                    AddChildTaskItemToParent(TaskItemList, task);
                 }
             }
 
             return TaskItemList;
+        }
+
+        /// <summary>
+        /// Finds the parent <c>TaskItem</c> of <c>task</c> and adds it to that parent's list of child <c>TaskItem</c>s.
+        /// </summary>
+        /// <param name="TaskItemList">The list containing all root <c>TaskItem</c>s</param>
+        /// <param name="task">The child <c>TaskItem</c></param>
+        private static void AddChildTaskItemToParent(IList<TaskItem> TaskItemList, Task task)
+        {
+            foreach (var taskItem in TaskItemList)
+            {
+                var parentTaskItem = FindParentForTask(task, taskItem);
+                if (parentTaskItem == null) continue;
+
+                ((TaskItem)parentTaskItem).Children.Add(new TaskItem(task));
+                break;
+            }
         }
 
         /// <summary>
@@ -102,6 +115,9 @@ namespace ToDoList.Models
         /// <param name="action">The action to be applied to all <c>Task</c>s who are children of the <c>parentID</c></param>
         private static void PerformAction(int parentID, TaskItem taskItem, Action<TaskItem> action)
         {
+            // check if the passed-in TaskItem is the child of the parent or is the parent.
+            // if it is, we continue.
+            // if it isn't, we recursively search for it.
             if (taskItem.Task.Parent != parentID && taskItem.Task.ID != parentID)
             {
                 foreach (TaskItem children in taskItem.Children)
